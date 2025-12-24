@@ -6,7 +6,7 @@ require_once '../config/db_connect.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Event Kampus</title>
+    <title>Sistem Event Kampus - Beranda</title>
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
@@ -36,7 +36,10 @@ require_once '../config/db_connect.php';
         <section class="events-section">
             <h3>Event Terbaru</h3>
             <div id="event-list" class="event-grid">
-                <p>Loading events...</p>
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Memuat data event...</p>
+                </div>
             </div>
         </section>
 
@@ -68,7 +71,6 @@ require_once '../config/db_connect.php';
         </div>
     </footer>
 
-    <script src="../assets/js/script.js"></script>
     <script>
         // Load events menggunakan AJAX (Fetch API)
         document.addEventListener('DOMContentLoaded', function() {
@@ -77,14 +79,21 @@ require_once '../config/db_connect.php';
 
         function loadRecentEvents() {
             fetch('../process/api_get_events.php?limit=3')
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
                 .then(data => {
                     const eventList = document.getElementById('event-list');
                     
-                    if (data.success && data.events.length > 0) {
+                    if (data.success && data.events && data.events.length > 0) {
                         let html = '';
                         data.events.forEach(event => {
                             const sisa_kuota = event.kuota - event.jumlah_pendaftar;
+                            const statusClass = sisa_kuota > 0 ? 'available' : 'full';
+                            
                             html += `
                                 <div class="event-card">
                                     <div class="event-date">
@@ -92,27 +101,30 @@ require_once '../config/db_connect.php';
                                         <span class="month">${formatDate(event.tanggal).month}</span>
                                     </div>
                                     <div class="event-content">
-                                        <h4>${event.nama_event}</h4>
+                                        <h4>${escapeHtml(event.nama_event)}</h4>
                                         <p class="event-info">
-                                            <span>📍 ${event.lokasi}</span>
-                                            <span>⏰ ${event.waktu}</span>
+                                            <span>📍 ${escapeHtml(event.lokasi)}</span>
+                                            <span>⏰ ${event.waktu} WIB</span>
                                         </p>
-                                        <p class="event-quota">
+                                        <p class="event-quota ${statusClass}">
                                             Kuota: <strong>${sisa_kuota}</strong> dari ${event.kuota}
                                         </p>
-                                        <a href="event_detail.php?id=${event.event_id}" class="btn btn-secondary">Lihat Detail</a>
+                                        <a href="event_detail.php?id=${event.event_id}" class="btn btn-secondary">
+                                            Lihat Detail
+                                        </a>
                                     </div>
                                 </div>
                             `;
                         });
                         eventList.innerHTML = html;
                     } else {
-                        eventList.innerHTML = '<p>Belum ada event tersedia.</p>';
+                        eventList.innerHTML = '<div class="no-data"><p>😔 Belum ada event tersedia.</p></div>';
                     }
                 })
                 .catch(error => {
                     console.error('Error loading events:', error);
-                    document.getElementById('event-list').innerHTML = '<p>Gagal memuat data event.</p>';
+                    document.getElementById('event-list').innerHTML = 
+                        '<div class="no-data"><p>❌ Gagal memuat data event. Silakan refresh halaman.</p></div>';
                 });
         }
 
@@ -123,6 +135,12 @@ require_once '../config/db_connect.php';
                 day: date.getDate(),
                 month: months[date.getMonth()]
             };
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
         }
     </script>
 </body>

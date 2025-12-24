@@ -1,4 +1,5 @@
 <?php
+
 // Konfigurasi Database
 define('DB_HOST', 'localhost');
 define('DB_USER', 'root');
@@ -16,29 +17,41 @@ if ($conn->connect_error) {
 // Set charset ke UTF-8
 $conn->set_charset("utf8mb4");
 
-// Fungsi untuk mencegah SQL Injection
+/**
+ * Fungsi untuk mencegah SQL Injection
+ */
 function clean_input($data) {
     global $conn;
     $data = trim($data);
     $data = stripslashes($data);
-    $data = htmlspecialchars($data);
+    $data = htmlspecialchars($data, ENT_QUOTES, 'UTF-8');
     return $conn->real_escape_string($data);
 }
 
-// Fungsi untuk menghasilkan kode unik
+/**
+ * Fungsi untuk menghasilkan kode unik pendaftaran
+ */
 function generate_kode_unik() {
     return 'EVT-' . date('Y') . '-' . strtoupper(substr(md5(uniqid(rand(), true)), 0, 6));
 }
 
-// Fungsi untuk cek login admin
+/**
+ * Fungsi untuk cek login admin
+ */
 function check_admin_login() {
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+    
     if (!isset($_SESSION['admin_id'])) {
         header("Location: admin_login.php");
         exit();
     }
 }
 
-// Fungsi untuk menghitung sisa kuota event
+/**
+ * Fungsi untuk menghitung sisa kuota event
+ */
 function get_sisa_kuota($event_id) {
     global $conn;
     
@@ -48,9 +61,12 @@ function get_sisa_kuota($event_id) {
     $stmt->bind_param("i", $event_id);
     $stmt->execute();
     $result = $stmt->get_result();
-    $event = $result->fetch_assoc();
     
-    if (!$event) return 0;
+    if ($result->num_rows === 0) {
+        return 0;
+    }
+    
+    $event = $result->fetch_assoc();
     
     // Hitung jumlah pendaftar yang diterima
     $query_count = "SELECT COUNT(*) as total FROM pendaftaran 
@@ -61,7 +77,28 @@ function get_sisa_kuota($event_id) {
     $result = $stmt->get_result();
     $count = $result->fetch_assoc();
     
-    return $event['kuota'] - $count['total'];
+    return max(0, $event['kuota'] - $count['total']);
+}
+
+/**
+ * Fungsi untuk validasi email
+ */
+function validate_email($email) {
+    return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
+}
+
+/**
+ * Fungsi untuk validasi NIM
+ */
+function validate_nim($nim) {
+    return preg_match('/^[0-9]{7,15}$/', $nim);
+}
+
+/**
+ * Fungsi untuk validasi nomor HP
+ */
+function validate_phone($phone) {
+    return preg_match('/^[0-9]{10,15}$/', $phone);
 }
 
 // Start session jika belum

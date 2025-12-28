@@ -6,7 +6,7 @@ $success = isset($_SESSION['success']) ? $_SESSION['success'] : '';
 $error = isset($_SESSION['error']) ? $_SESSION['error'] : '';
 unset($_SESSION['success'], $_SESSION['error']);
 
-// Process form submission
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nama_event = clean_input($_POST['nama_event']);
     $tanggal = clean_input($_POST['tanggal']);
@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $deskripsi = clean_input($_POST['deskripsi']);
     $kuota = intval($_POST['kuota']);
 
-    // Validasi
+    
     if (empty($nama_event) || empty($tanggal) || empty($waktu) || empty($lokasi) || $kuota <= 0) {
         $error = 'Semua field wajib harus diisi dengan benar';
     } else {

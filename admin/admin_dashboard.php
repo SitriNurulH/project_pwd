@@ -2,7 +2,7 @@
 require_once '../config/db_connect.php';
 check_admin_login();
 
-// Get statistics
+
 $query_total_event = "SELECT COUNT(*) as total FROM event WHERE deleted_at IS NULL";
 $total_event = $conn->query($query_total_event)->fetch_assoc()['total'];
 
@@ -12,7 +12,7 @@ $total_peserta = $conn->query($query_total_peserta)->fetch_assoc()['total'];
 $query_pending = "SELECT COUNT(*) as total FROM pendaftaran WHERE status = 'pending' AND deleted_at IS NULL";
 $total_pending = $conn->query($query_pending)->fetch_assoc()['total'];
 
-// Get recent events
+
 $query_events = "SELECT e.*, COUNT(p.daftar_id) as jumlah_pendaftar 
                  FROM event e 
                  LEFT JOIN pendaftaran p ON e.event_id = p.event_id AND p.deleted_at IS NULL

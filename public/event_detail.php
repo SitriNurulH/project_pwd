@@ -1,7 +1,7 @@
 <?php 
 require_once '../config/db_connect.php';
 
-// Ambil ID event dari URL
+
 $event_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
 if ($event_id == 0) {
@@ -9,7 +9,7 @@ if ($event_id == 0) {
     exit();
 }
 
-// Query event detail
+
 $query = "SELECT e.*, 
           COUNT(p.daftar_id) as jumlah_pendaftar
           FROM event e
@@ -253,7 +253,7 @@ $sisa_kuota = $event['kuota'] - $event['jumlah_pendaftar'];
         const form = document.getElementById('pendaftaran-form');
         const alertContainer = document.getElementById('alert-container');
 
-        // Show form when button clicked
+        
         if (btnDaftar) {
             btnDaftar.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -262,19 +262,19 @@ $sisa_kuota = $event['kuota'] - $event['jumlah_pendaftar'];
             });
         }
 
-        // Handle form submission dengan AJAX
+        
         form.addEventListener('submit', function(e) {
             e.preventDefault();
             
-            // Clear previous errors
+            
             document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
             document.querySelectorAll('.form-control').forEach(el => el.classList.remove('error'));
             alertContainer.innerHTML = '';
 
-            // Get form data
+            
             const formData = new FormData(form);
 
-            // Submit dengan Fetch API
+            
             fetch('../process/process_daftar.php', {
                 method: 'POST',
                 body: formData
@@ -290,13 +290,13 @@ $sisa_kuota = $event['kuota'] - $event['jumlah_pendaftar'];
                     `;
                     form.reset();
                     
-                    // Redirect setelah 3 detik
+                    
                     setTimeout(() => {
                         window.location.href = 'cek_status.php?kode=' + data.kode_unik;
                     }, 3000);
                 } else {
                     if (data.errors) {
-                        // Show field-specific errors
+                        
                         for (const [field, error] of Object.entries(data.errors)) {
                             const errorEl = document.getElementById('error-' + field);
                             const inputEl = document.getElementById(field);

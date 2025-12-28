@@ -72,7 +72,7 @@ require_once '../config/db_connect.php';
     </footer>
 
     <script>
-        // Load events menggunakan AJAX (Fetch API)
+        
         document.addEventListener('DOMContentLoaded', function() {
             loadRecentEvents();
         });
@@ -118,13 +118,13 @@ require_once '../config/db_connect.php';
                         });
                         eventList.innerHTML = html;
                     } else {
-                        eventList.innerHTML = '<div class="no-data"><p>😔 Belum ada event tersedia.</p></div>';
+                        eventList.innerHTML = '<div class="no-data"><p> Belum ada event tersedia.</p></div>';
                     }
                 })
                 .catch(error => {
                     console.error('Error loading events:', error);
                     document.getElementById('event-list').innerHTML = 
-                        '<div class="no-data"><p>❌ Gagal memuat data event. Silakan refresh halaman.</p></div>';
+                        '<div class="no-data"><p> Gagal memuat data event. Silakan refresh halaman.</p></div>';
                 });
         }
 

@@ -1,10 +1,4 @@
 <?php
-/**
- * API untuk mendapatkan daftar event
- * Mendukung search dan limit
- * Return format: JSON
- */
-
 header('Content-Type: application/json');
 require_once '../config/db_connect.php';
 
@@ -15,11 +9,11 @@ $response = [
 ];
 
 try {
-    // Parameter
+    
     $search = isset($_GET['search']) ? clean_input($_GET['search']) : '';
     $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 0;
     
-    // Query dasar
+    
     $query = "SELECT e.*, 
               COUNT(p.daftar_id) as jumlah_pendaftar
               FROM event e
@@ -28,19 +22,19 @@ try {
                   AND p.deleted_at IS NULL
               WHERE e.deleted_at IS NULL";
     
-    // Jika ada search keyword
+    
     if (!empty($search)) {
         $query .= " AND (e.nama_event LIKE ? OR e.lokasi LIKE ? OR e.narasumber LIKE ?)";
     }
     
     $query .= " GROUP BY e.event_id ORDER BY e.tanggal ASC";
     
-    // Jika ada limit
+    
     if ($limit > 0) {
         $query .= " LIMIT ?";
     }
     
-    // Prepare statement
+    
     $stmt = $conn->prepare($query);
     
     if (!empty($search)) {

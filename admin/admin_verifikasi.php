@@ -4,11 +4,11 @@ check_admin_login();
 
 $event_id = isset($_GET['event_id']) ? intval($_GET['event_id']) : 0;
 
-// Get events for dropdown
+
 $query_events = "SELECT event_id, nama_event FROM event WHERE deleted_at IS NULL ORDER BY tanggal DESC";
 $result_events = $conn->query($query_events);
 
-// Get pendaftaran
+
 if ($event_id > 0) {
     $query = "SELECT pf.*, ps.nama, ps.nim, ps.email, ps.no_hp, ps.jurusan, e.nama_event 
               FROM pendaftaran pf
@@ -60,7 +60,7 @@ if ($event_id > 0) {
             <ul class="sidebar-menu">
                 <li><a href="admin_dashboard.php">📊 Dashboard</a></li>
                 <li><a href="admin_event_add.php">➕ Tambah Event</a></li>
-                <li><a href="admin_verifikasi.php" class="active">✅ Verifikasi Pendaftaran</a></li>
+                <li><a href="admin_verifikasi.php" class="active"> Verifikasi Pendaftaran</a></li>
                 <li><a href="../process/process_logout.php" style="color: var(--danger-color);">🚪 Logout</a></li>
             </ul>
         </aside>

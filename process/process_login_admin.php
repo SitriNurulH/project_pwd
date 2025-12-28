@@ -1,49 +1,43 @@
 <?php
-/**
- * Process Login Admin
- * Validasi username & password dengan password_verify()
- * File: process/process_login_admin.php
- */
-
 session_start();
 require_once '../config/db_connect.php';
 
-// Cek request method
+
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     $_SESSION['login_error'] = 'Invalid request method';
     header("Location: ../admin/admin_login.php");
     exit();
 }
 
-// Ambil dan validasi input
+
 $username = isset($_POST['username']) ? trim($_POST['username']) : '';
 $password = isset($_POST['password']) ? $_POST['password'] : '';
 
-// Validasi input kosong
+
 if (empty($username) || empty($password)) {
     $_SESSION['login_error'] = 'Username dan password harus diisi';
     header("Location: ../admin/admin_login.php");
     exit();
 }
 
-// Validasi panjang username
+
 if (strlen($username) < 3) {
     $_SESSION['login_error'] = 'Username minimal 3 karakter';
     header("Location: ../admin/admin_login.php");
     exit();
 }
 
-// Validasi panjang password
+
 if (strlen($password) < 6) {
     $_SESSION['login_error'] = 'Password minimal 6 karakter';
     header("Location: ../admin/admin_login.php");
     exit();
 }
 
-// Escape username untuk mencegah SQL injection
+
 $username = $conn->real_escape_string($username);
 
-// Query admin berdasarkan username
+
 $query = "SELECT admin_id, username, password, nama_lengkap 
           FROM admin 
           WHERE username = ? AND deleted_at IS NULL 
@@ -61,7 +55,7 @@ $stmt->bind_param("s", $username);
 $stmt->execute();
 $result = $stmt->get_result();
 
-// Cek apakah username ditemukan
+
 if ($result->num_rows === 0) {
     $_SESSION['login_error'] = 'Username atau password salah';
     header("Location: ../admin/admin_login.php");
@@ -70,23 +64,23 @@ if ($result->num_rows === 0) {
 
 $admin = $result->fetch_assoc();
 
-// Verifikasi password dengan password_verify()
+
 if (!password_verify($password, $admin['password'])) {
     $_SESSION['login_error'] = 'Username atau password salah';
     header("Location: ../admin/admin_login.php");
     exit();
 }
 
-// Login berhasil - Set session
+
 $_SESSION['admin_id'] = $admin['admin_id'];
 $_SESSION['admin_username'] = $admin['username'];
 $_SESSION['admin_nama'] = $admin['nama_lengkap'];
 $_SESSION['login_time'] = time();
 
-// Regenerate session ID untuk keamanan
+
 session_regenerate_id(true);
 
-// Redirect ke dashboard
+
 header("Location: ../admin/admin_dashboard.php");
 exit();
 ?>

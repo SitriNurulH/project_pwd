@@ -1,11 +1,8 @@
--- Database: db_seminar
--- Sistem Event/Seminar Kampus
-
 DROP DATABASE IF EXISTS db_seminar;
 CREATE DATABASE db_seminar CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE db_seminar;
 
--- Tabel Admin
+
 CREATE TABLE admin (
     admin_id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
@@ -17,7 +14,7 @@ CREATE TABLE admin (
     INDEX idx_deleted (deleted_at)
 ) ENGINE=InnoDB;
 
--- Tabel Event
+
 CREATE TABLE event (
     event_id INT AUTO_INCREMENT PRIMARY KEY,
     nama_event VARCHAR(200) NOT NULL,
@@ -35,7 +32,7 @@ CREATE TABLE event (
     INDEX idx_deleted (deleted_at)
 ) ENGINE=InnoDB;
 
--- Tabel Peserta
+
 CREATE TABLE peserta (
     peserta_id INT AUTO_INCREMENT PRIMARY KEY,
     nama VARCHAR(100) NOT NULL,
@@ -50,7 +47,7 @@ CREATE TABLE peserta (
     INDEX idx_deleted (deleted_at)
 ) ENGINE=InnoDB;
 
--- Tabel Pendaftaran
+
 CREATE TABLE pendaftaran (
     daftar_id INT AUTO_INCREMENT PRIMARY KEY,
     peserta_id INT NOT NULL,
@@ -67,12 +64,12 @@ CREATE TABLE pendaftaran (
     UNIQUE KEY unique_registration (peserta_id, event_id, deleted_at)
 ) ENGINE=InnoDB;
 
--- Insert Admin Default
--- Password: admin123
+
+
 INSERT INTO admin (username, password, nama_lengkap) VALUES 
 ('admin', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Administrator');
 
--- Insert Event Contoh
+
 INSERT INTO event (nama_event, tanggal, waktu, lokasi, narasumber, deskripsi, kuota) VALUES 
 ('Workshop Web Development', '2025-01-15', '09:00:00', 'Lab Komputer A', 'Dr. Budi Santoso', 'Workshop intensif tentang pengembangan web modern menggunakan teknologi terkini seperti HTML5, CSS3, JavaScript, PHP dan MySQL. Peserta akan belajar membuat website dari nol hingga deployment.', 50),
 ('Seminar Kecerdasan Buatan', '2025-01-20', '13:00:00', 'Auditorium Utama', 'Prof. Ani Wijaya, M.Kom', 'Seminar tentang perkembangan AI dan Machine Learning serta implementasinya dalam berbagai bidang seperti kesehatan, pendidikan, dan industri. Akan ada demo aplikasi AI yang menarik.', 100),
@@ -80,14 +77,14 @@ INSERT INTO event (nama_event, tanggal, waktu, lokasi, narasumber, deskripsi, ku
 ('Bootcamp Mobile App Development', '2025-02-01', '08:00:00', 'Lab Komputer B', 'Dian Sari, M.T.', 'Bootcamp intensive selama 3 hari untuk belajar membuat aplikasi mobile menggunakan React Native. Cocok untuk pemula yang ingin terjun ke dunia mobile development.', 25),
 ('Seminar Cyber Security', '2025-02-10', '14:00:00', 'Ruang Seminar Lt.3', 'Ir. Ahmad Fauzi, M.Sc', 'Membahas tentang keamanan siber, ethical hacking, dan cara melindungi sistem dari serangan cyber. Akan ada demo penetration testing.', 80);
 
--- Insert Peserta Contoh
+
 INSERT INTO peserta (nama, nim, email, no_hp, jurusan) VALUES 
 ('Ahmad Rizki Pratama', '2021001', 'ahmad.rizki@mail.com', '081234567890', 'Teknik Informatika'),
 ('Siti Nurhaliza', '2021002', 'siti.nur@mail.com', '081234567891', 'Sistem Informasi'),
 ('Budi Santoso', '2021003', 'budi.santoso@mail.com', '081234567892', 'Teknik Komputer'),
 ('Dewi Lestari', '2021004', 'dewi.lestari@mail.com', '081234567893', 'Teknik Informatika');
 
--- Insert Pendaftaran Contoh
+
 INSERT INTO pendaftaran (peserta_id, event_id, status, kode_unik) VALUES 
 (1, 1, 'diterima', 'EVT-2025-A1B2C3'),
 (2, 1, 'pending', 'EVT-2025-D4E5F6'),

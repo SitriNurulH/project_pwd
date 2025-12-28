@@ -30,7 +30,6 @@ require_once '../config/db_connect.php';
             <p>Temukan event yang sesuai dengan minatmu</p>
         </section>
 
-        <!-- Search Bar dengan AJAX Live Search -->
         <div class="search-container">
             <input 
                 type="text" 
@@ -57,18 +56,18 @@ require_once '../config/db_connect.php';
         const searchInput = document.getElementById('search-input');
         const eventList = document.getElementById('event-list');
 
-        // Load all events on page load
+        
         document.addEventListener('DOMContentLoaded', function() {
             loadEvents();
         });
 
-        // Live Search dengan AJAX (debouncing untuk efisiensi)
+        
         searchInput.addEventListener('input', function() {
             clearTimeout(searchTimeout);
             searchTimeout = setTimeout(() => {
                 const keyword = this.value.trim();
                 loadEvents(keyword);
-            }, 300); // Delay 300ms untuk mengurangi request
+            }, 300); 
         });
 
         function loadEvents(keyword = '') {

@@ -1,13 +1,5 @@
 <?php
-/**
- * Utility untuk generate hash password
- * Digunakan untuk membuat password hash baru
- */
-
-// Contoh penggunaan:
-// Jalankan file ini di browser untuk generate hash password
-
-$password = "admin123"; // Ganti dengan password yang diinginkan
+$password = "admin123"; 
 
 $hash = password_hash($password, PASSWORD_DEFAULT);
 
@@ -17,7 +9,7 @@ echo "<p>Hash: <strong>$hash</strong></p>";
 echo "<hr>";
 echo "<p>Copy hash di atas dan gunakan untuk update password di database.</p>";
 
-// Verifikasi hash
+
 if (password_verify($password, $hash)) {
     echo "<p style='color: green;'>✓ Verifikasi berhasil! Hash ini valid untuk password tersebut.</p>";
 } else {

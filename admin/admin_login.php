@@ -1,7 +1,7 @@
 <?php 
 session_start();
 
-// Jika sudah login, redirect ke dashboard
+
 if (isset($_SESSION['admin_id'])) {
     header("Location: admin_dashboard.php");
     exit();
@@ -210,7 +210,7 @@ unset($_SESSION['login_error']);
     </div>
 
     <script>
-        // Client-side validation
+        
         document.getElementById('login-form').addEventListener('submit', function(e) {
             const username = document.getElementById('username').value.trim();
             const password = document.getElementById('password').value.trim();
@@ -234,7 +234,7 @@ unset($_SESSION['login_error']);
             }
         });
         
-        // Prevent multiple submissions
+        
         let isSubmitting = false;
         document.getElementById('login-form').addEventListener('submit', function(e) {
             if (isSubmitting) {

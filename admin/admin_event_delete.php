@@ -1,9 +1,4 @@
 <?php 
-/**
- * Soft Delete Event
- * Set deleted_at timestamp instead of hard delete
- */
-
 require_once '../config/db_connect.php';
 check_admin_login();
 
@@ -15,7 +10,7 @@ if ($event_id <= 0) {
     exit();
 }
 
-// Soft delete: set deleted_at timestamp
+
 $query = "UPDATE event SET deleted_at = NOW() WHERE event_id = ?";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("i", $event_id);

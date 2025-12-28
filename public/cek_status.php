@@ -120,9 +120,9 @@ if (!empty($kode)) {
                         <h3>Status Pendaftaran</h3>
                         <div class="status-badge-large status-<?php echo $pendaftaran['status']; ?>">
                             <?php 
-                            if ($pendaftaran['status'] === 'pending') echo '⏳ Menunggu Verifikasi';
-                            elseif ($pendaftaran['status'] === 'diterima') echo '✅ Diterima';
-                            else echo '❌ Ditolak';
+                            if ($pendaftaran['status'] === 'pending') echo 'Menunggu Verifikasi';
+                            elseif ($pendaftaran['status'] === 'diterima') echo ' Diterima';
+                            else echo ' Ditolak';
                             ?>
                         </div>
                     </div>

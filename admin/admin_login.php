@@ -16,308 +16,318 @@ unset($_SESSION['login_error']);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🔐 Admin Login - Sistem Event Kampus</title>
+
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root{
+            --primary:#667eea;
+            --secondary:#764ba2;
+            --bg:#f6f7fb;
+            --text:#111827;
+            --muted:#6b7280;
+            --border:#e5e7eb;
+            --card:#ffffff;
+            --shadow:0 16px 45px rgba(17,24,39,0.12);
+            --radius:22px;
+            --danger:#ef4444;
+            --success:#10b981;
         }
-        
-        body {
-            font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #ff69b4, #ffb6d9, #dda0dd);
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
+
+        *{ margin:0; padding:0; box-sizing:border-box; }
+
+        body{
+            font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+            min-height:100vh;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            background: radial-gradient(circle at top left, rgba(102,126,234,0.25), transparent 55%),
+                        radial-gradient(circle at bottom right, rgba(118,75,162,0.25), transparent 55%),
+                        var(--bg);
+            padding: 1.2rem;
         }
-        
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+
+        .login-wrap{
+            width:100%;
+            max-width: 460px;
+            background: rgba(255,255,255,0.88);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(229,231,235,0.9);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow:hidden;
         }
-        
-        .login-container {
-            width: 100%;
-            max-width: 450px;
-            background: white;
-            padding: 3rem;
-            border-radius: 25px;
-            box-shadow: 0 20px 60px rgba(255, 105, 180, 0.3);
-            animation: fadeInUp 0.6s ease;
+
+        .login-top{
+            padding: 2rem 2rem 1.4rem;
+            background: linear-gradient(135deg, rgba(102,126,234,0.14), rgba(118,75,162,0.14));
+            position: relative;
         }
-        
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+
+        .login-top::after{
+            content:"";
+            position:absolute;
+            inset:0;
+            background:
+                radial-gradient(circle at top left, rgba(102,126,234,0.18), transparent 55%),
+                radial-gradient(circle at bottom right, rgba(118,75,162,0.18), transparent 55%);
+            pointer-events:none;
         }
-        
-        .login-header {
-            text-align: center;
-            margin-bottom: 2.5rem;
+
+        .brand{
+            position:relative;
+            z-index:2;
+            display:flex;
+            align-items:center;
+            gap:0.9rem;
         }
-        
-        .login-icon {
-            font-size: 4rem;
+
+        .brand-icon{
+            width:54px;
+            height:54px;
+            border-radius: 18px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color:#fff;
+            font-size: 1.6rem;
+            box-shadow: 0 16px 28px rgba(102,126,234,0.25);
+        }
+
+        .brand h1{
+            font-size: 1.55rem;
+            font-weight: 950;
+            letter-spacing:0.2px;
+            color: var(--text);
+        }
+
+        .brand p{
+            margin-top: 0.2rem;
+            color: var(--muted);
+            font-weight: 650;
+            font-size: 0.98rem;
+        }
+
+        .login-body{
+            padding: 1.6rem 2rem 2rem;
+            background: rgba(255,255,255,0.9);
+        }
+
+        .alert{
+            border-radius: 16px;
+            padding: 1rem 1.1rem;
             margin-bottom: 1rem;
-            animation: bounce 2s infinite;
-        }
-        
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-        
-        .login-header h1 {
-            color: #ff69b4;
-            font-size: 2.2rem;
-            margin-bottom: 0.5rem;
-            font-weight: 800;
-        }
-        
-        .login-header p {
-            color: #6c757d;
-            font-size: 1.1rem;
-        }
-        
-        .alert {
-            padding: 1.25rem;
-            margin-bottom: 1.5rem;
-            border-radius: 15px;
-            background: linear-gradient(135deg, #fee2e2, #ffc0cb);
+            border: 1px solid rgba(239,68,68,0.25);
+            background: rgba(239,68,68,0.10);
             color: #991b1b;
-            border-left: 5px solid #ff6b9d;
-            animation: shake 0.5s ease;
-        }
-        
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
-        }
-        
-        .alert strong {
-            display: block;
-            margin-bottom: 0.25rem;
-        }
-        
-        .form-group {
-            margin-bottom: 1.75rem;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-            color: #ff69b4;
-            font-size: 1.05rem;
-        }
-        
-        .form-control {
-            width: 100%;
-            padding: 1rem 1.25rem;
-            font-size: 1.05rem;
-            border: 3px solid #ffc0cb;
-            border-radius: 15px;
-            transition: all 0.3s;
-            background: #fff0f5;
-        }
-        
-        .form-control:focus {
-            outline: none;
-            border-color: #ff69b4;
-            box-shadow: 0 0 0 4px rgba(255, 105, 180, 0.1);
-            transform: translateY(-2px);
-            background: white;
-        }
-        
-        .btn {
-            display: inline-block;
-            padding: 1rem 1.5rem;
-            text-decoration: none;
-            border-radius: 15px;
             font-weight: 700;
-            transition: all 0.3s;
-            border: none;
-            cursor: pointer;
-            font-size: 1.1rem;
-            width: 100%;
         }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, #ff69b4, #ffb6d9);
-            color: white;
-            box-shadow: 0 4px 15px rgba(255, 105, 180, 0.3);
+
+        .form-group{
+            margin-bottom: 1rem;
         }
-        
-        .btn-primary:hover {
-            background: linear-gradient(135deg, #ff1493, #ff69b4);
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(255, 105, 180, 0.4);
-        }
-        
-        .btn-primary:active {
-            transform: translateY(-1px);
-        }
-        
-        .back-link {
-            text-align: center;
-            margin-top: 1.5rem;
-        }
-        
-        .back-link a {
-            color: #ff69b4;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1.05rem;
-            transition: all 0.3s;
-        }
-        
-        .back-link a:hover {
-            color: #ff1493;
-            text-decoration: underline;
-        }
-        
-        .demo-info {
-            margin-top: 2rem;
-            padding: 1.5rem;
-            border-top: 2px dashed #ffc0cb;
-            text-align: center;
-            background: linear-gradient(135deg, #fff0f5, #ffe4e9);
-            border-radius: 15px;
-        }
-        
-        .demo-info p {
-            margin: 0.5rem 0;
-            color: #6c757d;
+
+        label{
+            display:block;
+            font-weight: 900;
+            margin-bottom: 0.45rem;
+            color: var(--text);
             font-size: 0.95rem;
         }
-        
-        .demo-info strong {
-            color: #ff69b4;
-            font-size: 1.05rem;
+
+        .input{
+            width:100%;
+            padding: 0.95rem 1rem;
+            border-radius: 16px;
+            border: 1px solid rgba(229,231,235,0.95);
+            outline:none;
+            background: #fff;
+            font-weight: 650;
+            transition: 0.25s;
         }
-        
-        .demo-info .demo-title {
-            color: #ff69b4;
-            font-weight: 700;
-            font-size: 1.1rem;
-            margin-bottom: 1rem;
+
+        .input:focus{
+            border-color: rgba(102,126,234,0.65);
+            box-shadow: 0 0 0 4px rgba(102,126,234,0.14);
+        }
+
+        .btn{
+            width:100%;
+            display:inline-flex;
+            align-items:center;
+            justify-content:center;
+            gap:0.55rem;
+            padding: 0.95rem 1rem;
+            border-radius: 16px;
+            border:none;
+            cursor:pointer;
+            font-weight: 950;
+            font-size: 1.05rem;
+            transition: 0.25s;
+        }
+
+        .btn-primary{
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color:#fff;
+            box-shadow: 0 16px 28px rgba(102,126,234,0.25);
+        }
+
+        .btn-primary:hover{
+            transform: translateY(-2px);
+            box-shadow: 0 20px 36px rgba(102,126,234,0.32);
+        }
+
+        .back-link{
+            text-align:center;
+            margin-top: 1rem;
+        }
+
+        .back-link a{
+            color:#1f3b8a;
+            font-weight: 850;
+            text-decoration:none;
+        }
+
+        .back-link a:hover{
+            text-decoration: underline;
+        }
+
+        .demo-box{
+            margin-top: 1.3rem;
+            padding: 1.1rem;
+            border-radius: 18px;
+            border: 1px dashed rgba(102,126,234,0.45);
+            background: rgba(102,126,234,0.06);
+        }
+
+        .demo-box h3{
+            margin:0 0 0.55rem;
+            font-size: 1rem;
+            font-weight: 950;
+            color:#1f3b8a;
+        }
+
+        .demo-box p{
+            margin:0.25rem 0;
+            color: var(--muted);
+            font-weight: 650;
+        }
+
+        .demo-box strong{
+            color: var(--text);
+        }
+
+        .mini{
+            margin-top: 0.7rem;
+            font-size: 0.85rem;
+            opacity:0.75;
         }
     </style>
 </head>
 <body>
-    <div class="login-container">
-        <div class="login-header">
-            <div class="login-icon">🔐</div>
-            <h1>Admin Login</h1>
-            <p>Sistem Event Kampus</p>
+
+    <div class="login-wrap">
+        <div class="login-top">
+            <div class="brand">
+                <div class="brand-icon">🔐</div>
+                <div>
+                    <h1>Admin Login</h1>
+                    <p>Sistem Event Kampus</p>
+                </div>
+            </div>
         </div>
 
-        <?php if (!empty($error)): ?>
-            <div class="alert">
-                <strong>⚠️ Error!</strong>
-                <?php echo htmlspecialchars($error); ?>
-            </div>
-        <?php endif; ?>
+        <div class="login-body">
 
-        <form action="../process/process_login_admin.php" method="POST" id="login-form">
-            <div class="form-group">
-                <label for="username">👤 Username</label>
-                <input 
-                    type="text" 
-                    id="username" 
-                    name="username" 
-                    class="form-control" 
-                    placeholder="Masukkan username admin"
-                    required 
-                    autocomplete="username"
-                    autofocus
-                >
-            </div>
+            <?php if (!empty($error)): ?>
+                <div class="alert">
+                    <strong>⚠️ Login Gagal</strong><br>
+                    <?php echo htmlspecialchars($error); ?>
+                </div>
+            <?php endif; ?>
 
-            <div class="form-group">
-                <label for="password">🔒 Password</label>
-                <input 
-                    type="password" 
-                    id="password" 
-                    name="password" 
-                    class="form-control" 
-                    placeholder="Masukkan password"
-                    required
-                    autocomplete="current-password"
-                >
-            </div>
+            <form action="../process/process_login_admin.php" method="POST" id="login-form" autocomplete="off">
+                <div class="form-group">
+                    <label for="username">👤 Username</label>
+                    <input 
+                        type="text" 
+                        id="username" 
+                        name="username" 
+                        class="input" 
+                        placeholder="Masukkan username admin"
+                        required 
+                        autofocus
+                    >
+                </div>
 
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary">
+                <div class="form-group">
+                    <label for="password">🔒 Password</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        class="input" 
+                        placeholder="Masukkan password"
+                        required
+                    >
+                </div>
+
+                <button type="submit" class="btn btn-primary" id="btn-login">
                     🚀 Login Sekarang
                 </button>
+            </form>
+
+            <div class="back-link">
+                <a href="../public/index.php">← Kembali ke Halaman Utama</a>
             </div>
-        </form>
 
-        <div class="back-link">
-            <a href="../public/index.php">← Kembali ke Halaman Utama</a>
-        </div>
+            <div class="demo-box">
+                <h3>🔑 Demo Login (Testing)</h3>
+                <p>Username: <strong>admin</strong></p>
+                <p>Password: <strong>admin123</strong></p>
+                <p class="mini">💡 Gunakan kredensial ini untuk login pertama kali.</p>
+            </div>
 
-        <div class="demo-info">
-            <div class="demo-title">🔑 Demo Login untuk Testing</div>
-            <p>Username: <strong>admin</strong></p>
-            <p>Password: <strong>admin123</strong></p>
-            <p style="font-size: 0.85rem; margin-top: 1rem; opacity: 0.7;">
-                💡 Gunakan kredensial di atas untuk login pertama kali
-            </p>
         </div>
     </div>
 
     <script>
-        // Client-side validation
-        document.getElementById('login-form').addEventListener('submit', function(e) {
-            const username = document.getElementById('username').value.trim();
-            const password = document.getElementById('password').value.trim();
-
-            if (username === '' || password === '') {
-                e.preventDefault();
-                alert('❌ Username dan password harus diisi!');
-                return false;
-            }
-            
-            if (username.length < 3) {
-                e.preventDefault();
-                alert('❌ Username minimal 3 karakter!');
-                return false;
-            }
-            
-            if (password.length < 6) {
-                e.preventDefault();
-                alert('❌ Password minimal 6 karakter!');
-                return false;
-            }
-        });
-        
-        // Prevent multiple submissions
+        // Basic validation + prevent multi submit
         let isSubmitting = false;
         document.getElementById('login-form').addEventListener('submit', function(e) {
             if (isSubmitting) {
                 e.preventDefault();
                 return false;
             }
+
+            const u = document.getElementById('username').value.trim();
+            const p = document.getElementById('password').value.trim();
+
+            if (!u || !p) {
+                e.preventDefault();
+                alert('❌ Username dan password wajib diisi!');
+                return false;
+            }
+
+            if (u.length < 3) {
+                e.preventDefault();
+                alert('❌ Username minimal 3 karakter!');
+                return false;
+            }
+
+            if (p.length < 6) {
+                e.preventDefault();
+                alert('❌ Password minimal 6 karakter!');
+                return false;
+            }
+
             isSubmitting = true;
-            
-            // Change button text
-            const btn = this.querySelector('button[type="submit"]');
+
+            const btn = document.getElementById('btn-login');
             btn.innerHTML = '⏳ Sedang Login...';
-            btn.style.opacity = '0.7';
+            btn.style.opacity = '0.8';
         });
     </script>
+
 </body>
 </html>
